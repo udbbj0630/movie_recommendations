@@ -1,0 +1,10 @@
+# Ignore data and log files.
+*.data
+**/*.log
+**/*.db
+# Ignore temporary files.
+.env
+**/.ipynb_checkpoints
+**/__pycache__
+# Ignore IDE setting files
+.vscode
