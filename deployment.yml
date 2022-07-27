@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  ranking:
+    build:
+      context: ${CUR_DIR}/ranking
+    container_name: movie_rec_ranking
+    volumes:
+      - ${CUR_DIR}/ranking:/ranking
+    ports:
+      - 8003:80
+    expose:
+      - 80
+    stdin_open: true
+    tty: true
+    command: go run serve_ranking.go
+ 
+  reverse_indexing:
+    build:
+      context: ${CUR_DIR}/reverse_indexing
+    container_name: movie_rec_elastic
+    volumes:
+      - ${CUR_DIR}/reverse_indexing/elastic.data:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 8004:9200
+      - 8005:9300
+    expose:
+      - 9200
+      - 9300
+    stdin_open: true
+    tty: true
+
