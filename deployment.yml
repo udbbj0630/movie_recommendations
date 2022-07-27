@@ -1,6 +1,20 @@
-version: '3'
+version: "3"
 
 services:
+  load-balancer:
+    build:
+      context: ${CUR_DIR}/load_balancer
+    container_name: movie_rec_lb
+    volumes:
+      - ${CUR_DIR}/load_balancer:/loadbalancer
+    ports:
+      - 8001:80
+    expose:
+      - 80
+    stdin_open: true
+    tty: true
+    command: /bin/bash init.sh ${HOST_IP} 8003 8004
+
   ranking:
     build:
       context: ${CUR_DIR}/ranking
@@ -14,7 +28,7 @@ services:
     stdin_open: true
     tty: true
     command: go run serve_ranking.go
- 
+
   reverse_indexing:
     build:
       context: ${CUR_DIR}/reverse_indexing
@@ -31,4 +45,3 @@ services:
       - 9300
     stdin_open: true
     tty: true
-
