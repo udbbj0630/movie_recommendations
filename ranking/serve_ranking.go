@@ -1,20 +1,31 @@
 package main
 
-
 import (
-	"fmt"
+	"encoding/json"
+	"log"
 	"net/http"
 )
 
-
 func main() {
-	fmt.Println("Hello, World!")
+	http.HandleFunc("/", handler)
+	http.ListenAndServe(":8080", nil)
 }
 
-
 func handler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
 
-    fmt.Fprintf(w, "Movie List %s,%s,%s,%s", 
-	            "Nope","Thor: Love and Thunder","Minions: The Rise of Gru",
-				"Where the Crawdads Sing")
+	resp := make(map[string][]string)
+	resp["movieList"] = []string{
+		"Nope", 
+		"Thor: Love and Thunder",
+		"Minions: The Rise of Gru",
+		"where the Crawdads Sing",
+	}
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		log.Fatalf("Error when JSON marshal. Err: %s", err)
+	}
+	w.Write(jsonResp)
+	return
 }
