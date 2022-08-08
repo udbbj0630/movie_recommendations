@@ -1,3 +1,3 @@
-module udbbj0630.github.com/models
+module udbbj0630.github.com/movie_recommendation
 
-go 1.19
+go 1.18
