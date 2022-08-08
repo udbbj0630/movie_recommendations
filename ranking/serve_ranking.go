@@ -14,7 +14,7 @@ import (
 	//"test.com/v/movie"
 	"io/ioutil"
 
-	movie "udbbj0630.github.com/models"
+	movie "udbbj0630.github.com/movie_recommendation/models"
 )
 
 // Elastic request query body
