@@ -14,7 +14,7 @@ import (
 	//"test.com/v/movie"
 	"io/ioutil"
 
-	movie "udbbj0630.github.com/movie_recommendation/models"
+	movie "udbbj0630.github.com/models"
 )
 
 // Elastic request query body
@@ -341,6 +341,32 @@ func (rec *recommender) initMetadata(metadataFilePath string) error {
 	}
 	return nil
 }
+func rankTfxCall(w http.ResponseWriter, req *http.Request) {
+	body, _ := ioutil.ReadAll(req.Body)
+	fmt.Printf("-%s\n-",body)
+	var tfxRequest  []string 
+	err := json.Unmarshal(body, &tfxRequest)
+	if (err != nil) {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "{\"error\": \"Parsing body failed due to " + err.Error() + "\"")
+		return
+	}
+	var tfxResponse  []string
+	sort.Strings(tfxRequest)
+	for  _,name := range tfxRequest {
+		fmt.Printf("%s\n", name)
+		tfxResponse  = append(tfxResponse , name)
+	}
+	var tfxResponseBytes []byte
+	tfxResponseBytes, err = json.Marshal(tfxResponse)
+	if (err != nil) {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "{\"error\": \"Fail to serialize tfx response.\"")
+		return
+	}
+	w.WriteHeader(200)
+	w.Write(tfxResponseBytes)
+}
 
 func main() {
 	// Parse flags to get backend urls.
@@ -363,5 +389,16 @@ func main() {
 		return
 	}
 	// Create hanlders.
-	http.ListenAndServe(":80", rec.handler())
+	//http.ListenAndServe(":80", rec.handler())
+	
+	fmt.Printf("%s\n",*tfxURL)
+	r1 := http.NewServeMux()
+    r1.HandleFunc("/predict", rankTfxCall)
+
+    //r2 := http.NewServeMux()
+    //r2.HandleFunc("/", helloTwo)
+
+    go func() { http.ListenAndServe(":81", r1) }()
+    go func() { http.ListenAndServe(":80", rec.handler()) }()
+    select {}
 }
