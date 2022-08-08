@@ -12,7 +12,7 @@ import (
 
 	"sort"
 
-	movie "udbbj0630.github.com/movie_recommendation/models"
+	movie "udbbj0630.github.com/models"
 )
 
 type TfxRequest struct {

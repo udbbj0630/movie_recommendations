@@ -12,4 +12,4 @@ do
   esac
 done
 docker stop ranking_dev
-docker run -it -d --rm --name ranking_dev -v /Users/shuangyueli/movie_recommendations/movie_recommendations/ranking:/ranking movie_recommendation/ranking:0.1 /bin/bash
+docker run -it -d --rm --name ranking_dev -v /data:/data /Users/shuangyueli/movie_recommendations/movie_recommendations/ranking:/ranking movie_recommendation/ranking:0.1 /bin/bash

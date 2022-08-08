@@ -2,9 +2,9 @@
 # Configures the nginx server upon startup.
 
 # Assign configuration values to enviroment values.
-export HOST_IP=$0
-export RANK_PORT=$1
-export REVERSE_INDEX_PORT=$2
+export HOST_IP=$1
+export RANK_PORT=$2
+export REVERSE_INDEX_PORT=$3
 
 # Produce nginx configuration from template
 /usr/bin/envsubst '$HOST_IP $RANK_PORT $REVERSE_INDEX_PORT' < nginx.conf.template > /etc/nginx/nginx.conf
